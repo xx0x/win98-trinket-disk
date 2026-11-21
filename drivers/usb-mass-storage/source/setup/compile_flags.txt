@@ -1,0 +1,4 @@
+--target=i686-w64-mingw32
+-I/opt/homebrew/opt/mingw-w64/toolchain-i686/i686-w64-mingw32/include
+-ffreestanding
+-finput-charset=UTF-8

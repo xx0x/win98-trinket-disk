@@ -1,0 +1,56 @@
+[Version]
+signature="$CHICAGO$"
+Class=Storage
+Provider=%Msft%
+LayoutFile=layout.inf, layout1.inf, layout2.inf
+DriverVer=06/08/2000
+;Maximus Decim modified - 31/05/2012 01.01  fix for NUSB 3.6
+
+[DestinationDirs]
+defaultdestdir=12
+
+[ClassInstall]
+Addreg=StorageClassReg
+ClassOrder=CLASS_ORDER_STORAGE
+
+[StorageClassReg]
+HKR,,,,%StorageClassName%
+HKR,,Icon,,-9
+
+[Manufacturer]
+%GenericMfg%=GENERIC
+
+[GENERIC]
+%GenOpticalDeviceDesc%=NTMap.Dev,GenOptical
+%GenDiskDeviceDesc%=NTMap.Dev,SBP2\GenDisk
+%GenCdRomDeviceDesc%=NTMap.Dev,GenCdRom
+%GenTapeDeviceDesc%=NTMap.Dev,GenSequential
+%GenFloppyDeviceDesc%=NTMap.Dev,GenSfloppy
+
+[NTMap.Dev]
+AddReg=NTMap.AddReg
+;CopyFiles=NTMap.CopyFiles
+DriverVer=06/08/2000
+
+[NTMap.AddReg]
+HKR,,DevLoader,,*IOS
+HKR,,PortDriver,,NTMAPHLP.PDR
+HKR,,PreloadDrivers,,""
+
+;[NTMap.CopyFiles]
+; ntmaphlp.pdr
+
+[ControlFlags]
+CopyFilesOnly=SBP2\GenDisk
+CopyFilesOnly=GenCdRom
+CopyFilesOnly=GenOptical
+
+[Strings]
+Msft="Microsoft"
+GenericMfg="Generic"
+StorageClassName="Storage device"
+GenDiskDeviceDesc="IEEE 1394 Disk"
+GenCdRomDeviceDesc="IEEE 1394 CD-ROM"
+GenOpticalDeviceDesc="IEEE 1394 Optical Disk"
+GenTapeDeviceDesc="IEEE 1394 Tape"
+GenFloppyDeviceDesc="IEEE 1394 Floppy Disk"

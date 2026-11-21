@@ -1,0 +1,201 @@
+;Maximus Decim native USB-flashdisk for Windows 98 3.6 - universal edition (localized on the target PC)
+;Based on NUSB 3.6 Enu (Maximus Decim). Strings below are replaced from the language pack by the setup.
+
+[Version]
+AdvancedINF = 2.5, %AdvPackWarn% 
+signature="$CHICAGO$"
+
+[DefaultInstall]
+CopyFiles=W98Upd.Copy.qfe,W98Upd.Copy.Sys32,W98Upd.Copy.VMM,W98Upd.Copy.Sys,W98Upd.Copy.Sub,W98Upd.Copy.Hlp,W98Upd.Copy.inf,Win98.Copy.cab
+AddReg=W98Upd.AddReg
+
+[DestinationDirs]
+W98Upd.Copy.qfe		= 10
+W98Upd.Copy.Sys32	= 10,SYSTEM32\DRIVERS
+W98Upd.Copy.VMM		= 22
+W98Upd.Copy.Sys		= 11
+W98Upd.Copy.Sub		= 12
+W98Upd.Copy.Hlp		= 18
+W98Upd.Copy.inf		= 17
+Win98.Copy.cab		= 10,Options\Cabs
+
+[W98Upd.Copy.qfe]
+explorer.exe,,,4
+
+[W98Upd.Copy.Sys32]
+1394BUS.SYS,,,32
+OHCI1394.SYS,,,32
+SBP2PORT.SYS,,,32
+NTMAP.SYS,,,32
+usbauth.sys,,,32
+usbntmap.sys,,,32
+usbstor.sys,,,4
+usbu2a.sys,,,32
+USBEHCI.SYS,,,32
+USBHUB20.SYS,,,32
+USBPORT.SYS,,,32
+wdmstub.sys,,,32
+OPENHCI.SYS,,,32
+UHCD.SYS,,,32   
+USBD.SYS,,,32   
+USBHUB.SYS,,,32  
+USBCCGP.SYS,,,32
+QV2KUX.SYS,,,32
+
+[W98Upd.Copy.VMM]
+ios.vxd,,,4
+
+[W98Upd.Copy.Sys]
+hotplug.dll,,,4
+systray.exe,,,4
+user.exe,,,4
+user32.dll,,,32
+
+[W98Upd.Copy.Sub]
+ntmaphlp.pdr,,,32
+DISKTSD.VXD,,,32
+usbmphlp.pdr,,,32
+cdvsd.vxd,,,32
+
+[W98Upd.Copy.Hlp]
+hardware.hlp
+
+[W98Upd.Copy.inf]
+1394.INF
+ntmap.inf
+usbstor.inf
+usbntmap.inf,,,32
+NODRIVER.INF
+USB2.INF,,,32
+USB.INF,,,32
+_USB2UN.INF,,,32
+
+[Win98.Copy.cab]
+1394BUS.SYS,,,32
+OHCI1394.SYS,,,32
+SBP2PORT.SYS,,,32
+NTMAP.SYS,,,32
+ios.vxd,,,4
+hotplug.dll,,,4
+systray.exe,,,4
+hardware.hlp,,,32
+1394.INF,,,32
+ntmap.inf,,,32
+ntmaphlp.pdr,,,32
+user.exe,,,4
+user32.dll,,,32
+DISKTSD.VXD,,,32
+usbauth.sys,,,32
+usbmphlp.pdr,,,32
+usbntmap.sys,,,32
+usbstor.sys,,,4
+usbstor.inf,,,32
+usbntmap.inf,,,32
+;usbu2a.sys,,,32
+NODRIVER.INF,,,32
+explorer.exe,,,4
+USB2.INF,,,32
+USBEHCI.SYS,,,32
+USBHUB20.SYS,,,32
+USBPORT.SYS,,,32
+wdmstub.sys,,,32
+cdvsd.vxd,,,32
+OPENHCI.SYS,,,32
+UHCD.SYS,,,32   
+USBD.SYS,,,32   
+USBHUB.SYS,,,32  
+USBCCGP.SYS,,,32
+USB.INF,,,32
+QV2KUX.SYS,,,32
+
+[W98Upd.AddReg]
+;msinfo32
+HKLM,"Software\Microsoft\Active Setup\Installed Components\%GUID%",,,"%UpdName%"
+HKLM,"Software\Microsoft\Active Setup\Installed Components\%GUID%","IsInstalled",0x10001,01,00,00,00
+HKLM,"Software\Microsoft\Active Setup\Installed Components\%GUID%","Locale",,"%LANG%"
+HKLM,"Software\Microsoft\Active Setup\Installed Components\%GUID%","Version",,"%VERSION%"
+
+;usb.addreg
+HKLM,Software\Microsoft\Windows\CurrentVersion\Run,SystemTray,,"SysTray.Exe"
+; Silent Driver Install
+HKLM,System\CurrentControlSet\Services\Class\USB,"SilentInstall",,"1"
+HKLM,System\CurrentControlSet\Services\Class\USB,"SilentInstallNotify",,"1"
+
+;qfecheck
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%\,,,"%UpdName%"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%10%\SYSTEM32\DRIVERS\1394BUS.SYS,,"4.10.0.2226"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%10%\SYSTEM32\DRIVERS\OHCI1394.SYS,,"4.10.0.2228"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%10%\SYSTEM32\DRIVERS\SBP2PORT.SYS,,"4.10.0.2227"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%10%\SYSTEM32\DRIVERS\NTMAP.SYS,,"4.10.0.2227"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%22%\ios.vxd,,"4.10.0.2225"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%11%\hotplug.dll,,"4.10.0.2224"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%11%\systray.exe,,"4.10.0.2224"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%11%\user.exe,,"4.10.0.2231"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%11%\user32.dll,,"4.10.0.2231"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%12%\ntmaphlp.pdr,,"4.10.0.2223"
+HKLM,%UpdateKey%\%SPKey%\%LocaleID%%UpdID%,%12%\disktsd.vxd,,"4.90.0.3000"
+
+;wdmstub
+;HKLM,System\CurrentControlSet\Services\Class\System\0000,NTMPDriver,,"update.sys,wdmstub.sys"
+
+;for uninstall usb2.0
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\USB20U,DisplayName,,%USB20UName%
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\USB20U,UninstallString,,"RUNDLL32.EXE %11%\ADVPACK.DLL,LaunchINFSection %17%\_USB2UN.INF,UNINSTALL"
+
+[Strings]
+;Non-localizable
+GUID                    = "{10e93000-e548-11d3-9741-00500483cae0}"
+VERSION                 = "4.10.0.2222"
+UpdID			= "242975"
+UpdateKey               = "Software\Microsoft\Windows\CurrentVersion\Setup\Updates"
+SPKey         		= "W98.SE"
+
+;Localizable strings
+Lang			= "EN"
+LocaleID		= "UPD"
+UpdName			= "Windows 98 Second Edition Q242975 Update"
+AdvPackWarn		= "You need a newer version of advpack.dll."
+SrcDiskName		= "Native USB for Windows 98 3.6 (incl. Q242975)"
+USB20UName		= "Remove Unofficial Universal USB 2.0 Stack (NUSB)"
+
+[SourceDisksNames]
+55="%SrcDiskName% Update","",0
+
+[SourceDisksFiles]
+1394BUS.SYS= 55    ;242975
+OHCI1394.SYS= 55   ;242975, 252958, 267304, 284837
+SBP2PORT.SYS= 55   ;242975, 267304, 311430
+NTMAP.SYS= 55      ;242975, 267304
+NTMAP.INF= 55      ;fix 242975 01.01
+1394.INF= 55       ;242975
+ios.vxd= 55        ;239696, 242975, 276602
+hotplug.dll= 55    ;242975
+systray.exe= 55    ;242975
+ntmaphlp.pdr= 55   ;242975
+hardware.hlp= 55   ;242975
+DISKTSD.VXD= 55    ;242975, 246387, WinMe (fix dencorso)
+USER.EXE= 55       ;242975 ,260067, 291362
+user32.dll= 55     ;242975 ,260067, 291362
+usbauth.sys=55     ;WinMe
+usbmphlp.pdr=55    ;WinMe (fix, Taiwan comrad)
+usbntmap.sys=55    ;WinMe
+usbstor.sys=55     ;WinMe
+usbstor.inf=55     ;fix WinMe 01.11a
+usbntmap.inf=55    ;fix WinMe 01.03
+usbu2a.sys=55      ;Aser
+NODRIVER.INF=55    ;fix 98se
+explorer.exe=55    ;fix IE55SP2
+USB2.INF=55        ;fix Win2000 01.02
+USB.INF=55         ;fix WinMe 01.01
+USBEHCI.SYS=55     ;Win2000
+USBHUB20.SYS=55    ;Win2000
+USBPORT.SYS=55     ;Win2000
+_USB2UN.INF=55     ;
+cdvsd.vxd=55       ;274370, 304708 for WinMe (fix dencorso)
+OPENHCI.SYS=55     ;WinMe
+UHCD.SYS=55        ;WinMe
+USBD.SYS=55        ;WinMe
+USBHUB.SYS=55      ;278289 for WinMe 
+USBCCGP.SYS=55     ;945436 for WinXP
+wdmstub.sys=55     ;Walter Oney
+QV2KUX.SYS=55      ;Casio

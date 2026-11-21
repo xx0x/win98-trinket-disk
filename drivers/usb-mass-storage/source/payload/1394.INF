@@ -1,0 +1,237 @@
+
+
+
+
+; 1394.INF  -- This file contains descriptions of all the 1394
+;              Host controllers supported in Windows 98/NT
+;
+;*** Created 11/2/96  (Creation Date)
+
+[Version]
+CatalogFile=1394.cat
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+signature="$CHICAGO$"
+Class=1394
+ClassGUID={6BDD1FC1-810F-11D0-BEC7-08002BE2092F}
+Provider=%Msft%
+
+[DestinationDirs]
+DefaultDestDir=11               ; LDID_SYS
+TILynx.CopyFiles=10,system32\drivers
+Adaptec.CopyFiles=10,system32\drivers
+OHCI.CopyFiles=10,system32\drivers
+1394.CopyFiles=10,system32\drivers
+NTMAPHLP.CopyFiles=12
+1394.DelFiles=10,system32\drivers
+1394Inf.DelFiles=17
+
+; =================== Class Sections ===========================
+
+[ClassInstall]
+Addreg=1394ClassReg
+
+[1394ClassReg]
+HKR,,,,%1394ClassName%
+HKR,,Icon,,-21
+
+; =================== Table of content =========================
+
+[Manufacturer]
+%Generic.Mfg%=Generic.Section
+%AdaptecMfg%=Adaptec
+%IntelMFG%=Intel
+%NECMfg%=NEC
+%NSCMfg%=NSC
+%SISMFG%=SIS
+%SONYMFG%=SONY
+%TIMfg%=TI
+
+
+; =================== Adaptec ========================
+
+[Adaptec]
+%PCI\VEN_9004&DEV_5800.DeviceDesc%=Adaptec.Device,,PCI\VEN_9004&DEV_5800
+%PCI\VEN_9004&DEV_5800&SUBSYS_89409004.DeviceDesc%=Adaptec.Device,,PCI\VEN_9004&DEV_5800&SUBSYS_89409004
+%PCI\VEN_9004&DEV_5800&SUBSYS_89419004.DeviceDesc%=Adaptec.Device,,PCI\VEN_9004&DEV_5800&SUBSYS_89419004
+%PCI\VEN_9004&DEV_5800&SUBSYS_89459004.DeviceDesc%=Adaptec.Device,,PCI\VEN_9004&DEV_5800&SUBSYS_89459004
+%PCI\VEN_9004&DEV_5800&SUBSYS_89469004.DeviceDesc%=Adaptec.Device,,PCI\VEN_9004&DEV_5800&SUBSYS_89469004
+%PCI\VEN_9004&DEV_5800&SUBSYS_89439004.DeviceDesc%=Adaptec.Device,,PCI\VEN_9004&DEV_5800&SUBSYS_89439004
+
+[Adaptec.Device]
+AddReg=Adaptec.AddReg, 1394.AddReg
+CopyFiles=Adaptec.CopyFiles, 1394.CopyFiles, NTMAPHLP.CopyFiles
+
+[Adaptec.AddReg]
+HKR,,NTMPDriver,,aha894x.sys
+HKR,,PreloadDrivers,,"aha894x.sys,"%1394PreloadDrivers%
+
+[Adaptec.CopyFiles]
+aha894x.sys
+
+; ===================== INTEL ===============================
+
+[Intel]
+%PCI\VEN_8086&DEV_7605.DeviceDesc%=OHCI.Device,PCI\VEN_8086&DEV_7605
+
+; ===================== NEC ===============================
+
+[NEC]
+%PCI\VEN_1033&DEV_0063.DeviceDesc%=OHCI.Device,PCI\VEN_1033&DEV_0063
+%PCI\VEN_1033&CC_0C0010.DeviceDesc%=OHCI.Device,PCI\VEN_1033&CC_0C0010
+
+; ===================== NSC ===============================
+
+[NSC]
+%PCI\VEN_100B&DEV_000F.DeviceDesc%=OHCI.Device,PCI\VEN_100B&DEV_000F
+%PCI\VEN_100B&CC_0C0010.DeviceDesc%=OHCI.Device,PCI\VEN_100B&CC_0C0010
+
+; ===================== SIS ===============================
+
+[SIS]
+%PCI\VEN_1039&DEV_7007.DeviceDesc%=OHCI.Device,PCI\VEN_1039&DEV_7007
+
+; ===================== Sony ===============================
+
+[SONY]
+%PCI\VEN_104D&DEV_8039.DeviceDesc%=SONY8039.Device,PCI\VEN_104D&DEV_8039
+%PCI\VEN_104D&DEV_8039&REV_03.DeviceDesc%=SONY8039REV3.Device,PCI\VEN_104D&DEV_8039&REV_03
+
+
+[SONY8039.Device]
+AddReg=OHCI.AddReg, 1394.AddReg
+CopyFiles=OHCI.CopyFiles, 1394.CopyFiles
+
+[SONY8039.Device.HW]
+AddReg=SONY8039.AddReg.HW
+
+[SONY8039.AddReg.HW]
+HKR,,DiagnosticMode,0x00010003,2
+
+[SONY8039REV3.Device]
+AddReg=OHCI.AddReg, 1394.AddReg
+CopyFiles=OHCI.CopyFiles, 1394.CopyFiles
+
+
+; =================== Texas Instruments ========================
+
+[TI]
+%PCI\VEN_104C&DEV_8000.DeviceDesc%=TILynx.Device,PCI\VEN_104C&DEV_8000
+%PCI\VEN_104C&DEV_8000&SUBSYS_8003104C.DeviceDesc%=TILynx.Device,PCI\VEN_104C&DEV_8000&SUBSYS_8003104C
+%PCI\VEN_104C&DEV_8009.DeviceDesc%=OHCI.Device,PCI\VEN_104C&DEV_8009
+%PCI\VEN_104C&DEV_8009&SUBSYS_800D104C.DeviceDesc%=OHCI.Device,PCI\VEN_104C&DEV_8009&SUBSYS_800D104C
+%PCI\VEN_104C&CC_0C0010.DeviceDesc%=OHCI.Device,PCI\VEN_104C&CC_0C0010
+
+%PCI\VEN_104C&DEV_8009&SUBSYS_B11F0E11.DeviceDesc%=CompaqDV.Device,,PCI\VEN_104C&DEV_8009&SUBSYS_B11F0E11
+%PCI\VEN_104C&DEV_8019&SUBSYS_B11F0E11.DeviceDesc%=CompaqDV.Device,,PCI\VEN_104C&DEV_8019&SUBSYS_B11F0E11
+%PCI\VEN_9004&DEV_5800&SUBSYS_B0CB0E11.DeviceDesc%=CompaqDV.Device,,PCI\VEN_9004&DEV_5800&SUBSYS_B0CB0E11
+
+%PCI\VEN_104C&DEV_8009&SUBSYS_8032104D.DeviceDesc%=OHCI.Device,PCI\VEN_104C&DEV_8009&SUBSYS_8032104D
+
+[CompaqDV.Device]
+; this is empty for a reason
+
+[TILynx.Device]
+AddReg=TILynx.AddReg, 1394.AddReg
+CopyFiles=TILynx.CopyFiles, 1394.CopyFiles, NTMAPHLP.CopyFiles
+
+[TILynx.AddReg]
+HKR,,NTMPDriver,,tilynx.sys
+HKR,,PreloadDrivers,,"tilynx.sys,"%1394PreloadDrivers%
+
+[TILynx.CopyFiles]
+tilynx.sys
+
+; =================== Generic ==================================
+
+[Generic.Section]
+%PCI\CC_0C0010.DeviceDesc%=OHCI.Device,PCI\CC_0C0010
+
+[1394.AddReg]
+HKR,,DevLoader,,*NTKERN
+HKR,,EnumPropPages,,"sysclass.dll,Bus1394EnumPropPages"
+
+[1394.CopyFiles]
+1394bus.sys
+sbp2port.sys
+ntmap.sys
+dbfilter.sys
+dbclass.sys
+
+[1394.DelFiles]
+sonyohci.sys,,,1
+
+[1394Inf.DelFiles]
+sonyohci.inf,,,1
+
+[NTMAPHLP.CopyFiles]
+ntmaphlp.pdr
+
+[OHCI.Device]
+AddReg=OHCI.AddReg, 1394.AddReg
+CopyFiles=OHCI.CopyFiles, 1394.CopyFiles, NTMAPHLP.CopyFiles
+DelFiles=1394.DelFiles, 1394Inf.DelFiles
+
+[OHCI.AddReg]
+HKR,,NTMPDriver,,ohci1394.sys
+HKR,,PreloadDrivers,,"ohci1394.sys,"%1394PreloadDrivers%
+
+[OHCI.CopyFiles]
+ohci1394.sys
+
+[ControlFlags]
+
+[Strings]
+Msft="Microsoft"
+1394ClassName="1394 Bus Controller"
+
+1394PreloadDrivers="sbp2port.sys,ntmap.sys,dbfilter.sys,iosubsys\ntmaphlp.pdr"
+
+Generic.Mfg="(Standard 1394 controllers)"
+PCI\CC_0C0010.DeviceDesc="PCI OHCI Compliant IEEE 1394 Host Controller"
+
+AdaptecMfg="Adaptec"
+PCI\VEN_9004&DEV_5800.DeviceDesc="Adaptec AHA-894x/AIC-5800 1394 Controller"
+PCI\VEN_9004&DEV_5800&SUBSYS_89409004.DeviceDesc="Adaptec AHA-8940 1394 PCI Host Adapter"
+PCI\VEN_9004&DEV_5800&SUBSYS_89419004.DeviceDesc="Adaptec AHA-8940CP 1394 PCI Host Adapter"
+PCI\VEN_9004&DEV_5800&SUBSYS_89459004.DeviceDesc="Adaptec AHA-8945 1394 PCI Host Adapter"
+PCI\VEN_9004&DEV_5800&SUBSYS_89469004.DeviceDesc="Adaptec AHA-8945CP 1394 PCI Host Adapter"
+PCI\VEN_9004&DEV_5800&SUBSYS_89439004.DeviceDesc="Adaptec APA-1394 CardBus-to-1394 Adapter"
+
+IntelMfg="Intel"
+PCI\VEN_8086&DEV_7605.DeviceDesc="Intel 82372FB 1394 OHCI Host Controller"
+
+NECMfg="NEC"
+PCI\VEN_1033&DEV_0063.DeviceDesc="NEC Firewarden OHCI Compliant IEEE 1394 Host Controller"
+PCI\VEN_1033&CC_0C0010.DeviceDesc="NEC Firewarden OHCI Compliant IEEE 1394 Host Controller"
+
+NSCMfg="National Semiconductor"
+PCI\VEN_100B&DEV_000F.DeviceDesc="National Semiconductor OHCI Compliant IEEE 1394 Host Controller"
+PCI\VEN_100B&CC_0C0010.DeviceDesc="National Semiconductor OHCI Compliant IEEE 1394 Host Controller"
+
+SISMfg="Silicon Integrated Systems"
+PCI\VEN_1039&DEV_7007.DeviceDesc="SiS 7007 OHCI Compliant IEEE 1394 Host Controller"
+
+SONYMfg="Sony Corporation"
+PCI\VEN_104C&DEV_8009&SUBSYS_8032104d.DeviceDesc="Sony OHCI i.LINK(IEEE 1394) PCI Host Controller"
+PCI\VEN_104D&DEV_8039&REV_03.DeviceDesc="Sony CXD3222 OHCI i.LINK(IEEE 1394) PCI Host Controller"
+PCI\VEN_104D&DEV_8039.DeviceDesc="Sony CXD3222 OHCI i.LINK(IEEE 1394) PCI Host Controller"
+
+TIMfg="Texas Instruments"
+PCI\VEN_104C&DEV_8000.DeviceDesc="Texas Instruments LYNX Compatible IEEE 1394 Host Controller"
+PCI\VEN_104C&DEV_8000&SUBSYS_8003104C.DeviceDesc="Texas Instruments LYNX IEEE 1394 Host Controller"
+PCI\VEN_104C&DEV_8009.DeviceDesc="Texas Instruments OHCI Compliant IEEE 1394 Host Controller"
+PCI\VEN_104C&DEV_8009&SUBSYS_800D104C.DeviceDesc="Texas Instruments OHCI IEEE 1394 Host Controller"
+PCI\VEN_104C&CC_0C0010.DeviceDesc="Texas Instruments OHCI Compliant IEEE 1394 Host Controller"
+
+; the below subsys match is for compaq to leave vxd in place
+PCI\VEN_104C&DEV_8009&SUBSYS_B11F0E11.DeviceDesc="Texas Instruments OHCI IEEE 1394 Host Controller"
+PCI\VEN_104C&DEV_8019&SUBSYS_B11F0E11.DeviceDesc="Texas Instruments OHCI IEEE 1394 Host Controller"
+PCI\VEN_9004&DEV_5800&SUBSYS_B0CB0E11.DeviceDesc="Texas Instruments OHCI IEEE 1394 Host Controller"
+
+
+
+
+
+
+
+

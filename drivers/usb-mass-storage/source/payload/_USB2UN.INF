@@ -1,0 +1,33 @@
+;Maximus Decim uninstall USB 2.0 universal stack
+
+[Version]
+AdvancedINF = 2.5, %AdvPackWarn% 
+signature="$CHICAGO$"
+
+[DefaultInstall]
+
+[UnInstall]
+DelReg=W98Un.DelReg
+DelFiles=W98Un.Sys32,W98Un.inf
+Cleanup=1
+
+[DestinationDirs]
+W98Un.Sys32 = 10,SYSTEM32\DRIVERS
+W98Un.inf = 17
+
+[W98Un.DelReg]
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\USB20U
+
+[W98Un.Sys32]
+USBEHCI.SYS
+USBHUB20.SYS
+USBPORT.SYS
+
+[W98Un.inf]
+USB2.INF
+
+[Strings]
+;Non-localizable
+
+;Localizable strings
+AdvPackWarn		= "You need a newer version of advpack.dll."
