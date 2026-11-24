@@ -14,11 +14,14 @@ clean-up, file checks, backup and full uninstall.
 * Download: [NUSB36UNIV.EXE](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/usb-mass-storage/NUSB36UNIV.EXE)
 * More info: [drivers/usb-mass-storage](drivers/usb-mass-storage/README.md)
 
-### Xbox One controller
+### XPAD98 – Xbox One / Xbox Series controller
 
-A driver that lets Xbox One controllers work on Windows 98 over a USB connection.
+A driver that lets Xbox One and Xbox Series X|S controllers work on Windows 98 SE
+over a USB connection – as a regular game controller in Control Panel and in
+games. Works with or without NUSB.
 
-*Coming soon*
+* Download: [XPAD98.INF](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/xbox-gamepad/XPAD98.INF) and [XPAD98.SYS](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/xbox-gamepad/XPAD98.SYS) (keep both in one folder)
+* More info: [drivers/xbox-gamepad](drivers/xbox-gamepad/README.md)
 
 ## AI and Transparency
 

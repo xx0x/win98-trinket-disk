@@ -1,0 +1,59 @@
+; XPAD98.INF - Xbox One / Xbox Series X|S controller (USB) for Windows 98 SE
+; Installs XPAD98.SYS, a HID minidriver; Windows then adds its own "HID-compliant game controller".
+
+[Version]
+Signature="$CHICAGO$"
+Class=HID
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%Provider%
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%Microsoft%=Microsoft
+
+[Microsoft]
+%PID_02D1%=XPAD98,USB\VID_045E&PID_02D1
+%PID_02DD%=XPAD98,USB\VID_045E&PID_02DD
+%PID_02E3%=XPAD98,USB\VID_045E&PID_02E3
+%PID_02EA%=XPAD98,USB\VID_045E&PID_02EA
+%PID_0B00%=XPAD98,USB\VID_045E&PID_0B00
+%PID_0B12%=XPAD98,USB\VID_045E&PID_0B12
+
+[XPAD98]
+CopyFiles=XPAD98.Copy
+AddReg=XPAD98.AddReg
+
+[DestinationDirs]
+XPAD98.Copy=10,system32\drivers
+
+[XPAD98.Copy]
+xpad98.sys
+
+[XPAD98.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,xpad98.sys
+HKLM,"System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_02D1",OEMName,,%PID_02D1%
+HKLM,"System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_02DD",OEMName,,%PID_02DD%
+HKLM,"System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_02E3",OEMName,,%PID_02E3%
+HKLM,"System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_02EA",OEMName,,%PID_02EA%
+HKLM,"System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_0B00",OEMName,,%PID_0B00%
+HKLM,"System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_0B12",OEMName,,%PID_0B12%
+
+[SourceDisksNames]
+1=%Disk%,,0
+
+[SourceDisksFiles]
+xpad98.sys=1
+
+[Strings]
+Provider="XPAD98"
+Microsoft="Microsoft"
+Disk="XPAD98 driver disk"
+PID_02D1="Xbox One Controller"
+PID_02DD="Xbox One Controller (2015)"
+PID_02E3="Xbox One Elite Controller"
+PID_02EA="Xbox One S Controller"
+PID_0B00="Xbox Elite Series 2 Controller"
+PID_0B12="Xbox Series X|S Controller"
