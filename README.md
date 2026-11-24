@@ -1,4 +1,6 @@
-# win98-trinket-disk
+<img src="./img/win98-trinket-disk.png" alt="win98-trinket-disk logo" style="width:300px" />
+
+# win98 trinket disk
 Newly developed utilities and drivers for old systems.
 
 ## Drivers
