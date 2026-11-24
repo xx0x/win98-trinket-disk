@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-or-later
 # build.sh [OUT.SYS] - build XPAD98.SYS (default: ../../XPAD98.SYS)
 # Needs: i686-w64-mingw32-gcc (mingw-w64), python3 with pefile ($PYTHON).
 # XPAD_CFLAGS=-DXPAD_DIAG builds the diagnostic version (logs to HKLM\Software\XPAD98, key must exist).

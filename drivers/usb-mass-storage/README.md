@@ -21,7 +21,7 @@ version and every file it replaces, shows what it will do before changing
 anything, backs up all replaced files and can uninstall completely – the
 original can only remove its USB 2.0 stack.
 
-| | |
+| Files | Description |
 |---|---|
 | [`NUSB36UNIV.EXE`](NUSB36UNIV.EXE) | the installer (single file, 864 768 bytes) |
 | [`source/`](source/) | setup program sources, package files, build tools |
@@ -133,6 +133,11 @@ UTM / QEMU, 2026-11-21:
   (incl. `USER.EXE` – Western code); controllers re-detected incl. *Intel ICH9
   Family USB2 Enhanced Host Controller*, USB stick at 480 Mb/s as *Removable
   Disk (E:)*, read/write verified, safe removal works; repeated cold boots fine.
+
+Real hardware:
+
+* **Czech Windows 98 SE (4.10.2222A)** on the author's own PC: installed and
+  working.
 
 ## Windows 98 in UTM – notes
 

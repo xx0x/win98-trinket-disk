@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """fixpe.py DRIVER.SYS - set the PE checksum and check that every import is one that Windows 98 SE
 provides (NTKERN's ntoskrnl subset, HAL, HIDCLASS)."""
 import sys, pefile
@@ -5,7 +6,8 @@ W98 = {
  'ntoskrnl.exe': set('''ExAllocatePool ExAllocatePoolWithTag ExFreePool IoAllocateIrp IoFreeIrp IoBuildDeviceIoControlRequest
   IoCancelIrp IofCallDriver IofCompleteRequest KeInitializeEvent KeSetEvent KeWaitForSingleObject InterlockedIncrement
   InterlockedDecrement InterlockedExchange PoCallDriver PoStartNextPowerIrp KeInitializeSpinLock IoAcquireCancelSpinLock
-  IoReleaseCancelSpinLock RtlWriteRegistryValue ExQueueWorkItem'''.split()),
+  IoReleaseCancelSpinLock RtlWriteRegistryValue ExQueueWorkItem
+  KeInitializeTimer KeInitializeDpc KeSetTimer KeCancelTimer'''.split()),
  'hal.dll': {'KfAcquireSpinLock', 'KfReleaseSpinLock'},
  'hidclass.sys': {'HidRegisterMinidriver'},
 }
