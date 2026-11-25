@@ -34,7 +34,7 @@
  *     off) and opens the interrupt IN/OUT pipes of interface 0 (the pad; on the wireless receiver
  *     the first pad slot),
  *   - sends the start-up packets the pad type needs (Xbox One/Series: GIP power on, LED, auth done
- *     and xpad's vendor-specific init packets; Xbox 360: xpad's vendor request and the player-1 LED;
+ *     and xpad's vendor-specific init packets; Xbox 360: xpad's vendor request and the player LED;
  *     wireless receiver: presence inquiry and LED),
  *   - turns the pad's input packets into reports of a HID game pad, applying xpad's quirks
  *     (sticks off, triggers as buttons, Share button position).
@@ -157,6 +157,7 @@ typedef struct {
     volatile LONG reported;           /* a report was delivered since the last tick */
     volatile LONG refresh;            /* the next cancelled read is ours: deliver the current state */
     PIRP volatile cur_irp;            /* HID read waiting in the USB stack */
+    LONG player;                      /* Xbox 360 wired: player number 0-31 for the ring LED, -1 none */
     USHORT btn;                       /* HID buttons 1-10 (A B X Y LB RB View Menu LS RS) */
     UCHAR dpad, guide, share;         /* d-pad bits: up, down, left, right */
     USHORT lt, rt;
@@ -234,8 +235,24 @@ static const GIP_INIT g_gip_init[] = {
 };
 static const UCHAR gip_guide_ack[]   = { 0x01, 0x20, 0x00, 0x09, 0x00, 0x07, 0x20, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-/* Xbox 360 wired: ring LED "player 1" (xpad: pad number + 2) */
-static const UCHAR x360_led_p1[]     = { 0x01, 0x03, 0x02 };   /* flash, then player 1 */
+/* Xbox 360 wired pads get player numbers like xpad's xpad_led_probe: the lowest free one, kept until the
+ * pad is removed; the ring LED shows (number % 4) + 1 (LED command (number % 4) + 2: flash, then on) */
+static volatile LONG g_players = 0;      /* bit n = player number n in use */
+
+static LONG player_alloc(void) {
+    LONG i;
+    for (i = 0; i < 32; i++) {
+        LONG bit = 1L << i;
+        if (!(__sync_fetch_and_or(&g_players, bit) & bit)) return i;
+    }
+    return -1;
+}
+
+static void player_free(DEVEXT *e) {
+    if (e->player >= 0) __sync_fetch_and_and(&g_players, ~(1L << e->player));
+    e->player = -1;
+}
+
 /* Xbox 360 wireless receiver: pad presence inquiry and LED "player 1" */
 static const UCHAR x360w_presence[]  = { 0x08, 0x00, 0x0f, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static const UCHAR x360w_led_p1[]    = { 0x00, 0x00, 0x08, 0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -465,7 +482,11 @@ static NTSTATUS start_usb(DEVEXT *e) {
     e->seq = 0; e->init_done = 0;
     if (e->type == PAD_360) {
         x360_vendor_request(e);                   /* some third-party pads need it (xpad_start_input) */
-        { NTSTATUS t = send_raw_sync(e, x360_led_p1, sizeof x360_led_p1); dlog(L"InitLed", t); (void)t; }
+        UCHAR led[3] = { 0x01, 0x03, 0x02 };
+        NTSTATUS t;
+        if (e->player < 0) e->player = player_alloc();
+        if (e->player > 0) led[2] = (UCHAR)(0x02 + e->player % 4);
+        t = send_raw_sync(e, led, sizeof led); dlog(L"InitLed", t); (void)t;
     } else if (e->type == PAD_360W) {
         send_raw_sync(e, x360w_presence, sizeof x360w_presence);
         send_raw_sync(e, x360w_led_p1, sizeof x360w_led_p1);
@@ -746,6 +767,7 @@ static NTSTATUS NTAPI dispatch_pnp(PDEVICE_OBJECT d, PIRP irp) {
     case IRP_MN_REMOVE_DEVICE:
         e->started = 0;
         timer_stop(e);
+        if (s->MinorFunction == IRP_MN_REMOVE_DEVICE) player_free(e);
         break;
     }
     IoSkipCurrentIrpStackLocation(irp);
@@ -767,6 +789,7 @@ static NTSTATUS NTAPI add_device(PDRIVER_OBJECT drv, PDEVICE_OBJECT fdo) {
     DEVEXT *e = EXT(fdo);
     (void)drv;
     memset(e, 0, sizeof *e);
+    e->player = -1;
     e->next = HIDEXT(fdo)->NextDeviceObject;
     dlog(L"AddDevice", 1);
     fdo->Flags |= DO_POWER_PAGABLE;

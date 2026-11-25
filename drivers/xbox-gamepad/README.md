@@ -10,7 +10,7 @@ third-party controllers** work as an ordinary game controller on Windows 98
 Second Edition, connected with a USB cable: Control Panel → *Game Controllers*,
 DirectInput and joystick-aware games see it like any USB gamepad. Original Xbox
 controllers (with a USB adapter) and the first pad on an Xbox 360 wireless
-receiver work too. The full list of 322 supported controllers is
+receiver work too. The full list of 307 supported controllers is
 [at the end](#supported-controllers).
 
 | Files | Description |
@@ -55,7 +55,9 @@ Not supported: **rumble** – Windows 98 games use rumble only through
 DirectInput force feedback, which needs a HID force-feedback (PID)
 implementation in the driver, not just a motor command; the headset jack; the
 Elite paddles; more than the first pad on an Xbox 360 wireless receiver;
-Bluetooth.
+Bluetooth; keyboards and keypads with a gamepad function (Wooting, Azeron) –
+Windows 98 installs one driver for the whole USB device, so XGP98 would take
+their keyboard away, and they are left out of the INF.
 
 ## How it works
 
@@ -66,15 +68,15 @@ recognises the controller type (from `xpad`'s device table or the USB interface
 class), selects the USB configuration (audio interfaces stay off), sends the
 start-up packets the type needs (Xbox One/Series: GIP power on, LED,
 authentication and `xpad`'s vendor-specific init packets; Xbox 360: `xpad`'s
-vendor request and the player-1 LED; wireless receiver: presence inquiry and
-LED), and converts the controller's input packets into one common HID gamepad
-report, applying `xpad`'s per-controller quirks. Controllers send nothing until
-touched, so the driver reports the current state again every couple of seconds
-while idle (Xbox One/Series: on the controller's own status packets; others:
-from a timer) – a program that opens the joystick later then still sees the
-neutral state. It uses only kernel functions
-that Windows 98 SE provides; the build checks the imports and that the image
-can be loaded by the Windows 98 driver loader.
+vendor request and the player LED, a different number 1–4 for each connected
+pad; wireless receiver: presence inquiry and LED), and converts the controller's
+input packets into one common HID gamepad report, applying `xpad`'s
+per-controller quirks. Controllers send nothing until touched, so the driver
+reports the current state again every couple of seconds while idle (Xbox
+One/Series: on the controller's own status packets; others: from a timer) – a
+program that opens the joystick later then still sees the neutral state. It uses
+only kernel functions that Windows 98 SE provides; the build checks the imports
+and that the image can be loaded by the Windows 98 driver loader.
 
 ## Tested
 
@@ -128,17 +130,15 @@ hope that it will be useful, but WITHOUT ANY WARRANTY. See
 
 ## Supported controllers
 
-All controllers of `xpad`'s device table (322), generated from the Linux kernel
-source. Controllers not in the list that follow the same protocols can be added
-to the table.
+All controllers of `xpad`'s device table (307), generated from the Linux kernel
+source – except the keyboards and keypads with a gamepad function. Controllers
+not in the list that follow the same protocols can be added to the table.
 
 | VID:PID | Controller | Type |
 |---|---|---|
 | 0079:18D4 | GPD Win 2 X-Box Controller | Xbox 360 |
 | 0351:1000 | CRKD LP Blueberry Burst Pro Edition (Xbox) | Xbox 360 |
 | 0351:2000 | CRKD LP Black Tribal Edition (Xbox) | Xbox 360 |
-| 03EB:FF01 | Wooting One (Legacy) | Xbox 360 |
-| 03EB:FF02 | Wooting Two (Legacy) | Xbox 360 |
 | 03F0:038D | HyperX Clutch | Xbox 360 |
 | 03F0:048D | HyperX Clutch | Xbox 360 |
 | 03F0:0495 | HyperX Clutch Gladiate | Xbox One / Series |
@@ -331,12 +331,6 @@ to the table.
 | 1689:FD00 | Razer Onza Tournament Edition | Xbox 360 |
 | 1689:FD01 | Razer Onza Classic Edition | Xbox 360 |
 | 1689:FE00 | Razer Sabertooth | Xbox 360 |
-| 16D0:1103 | Azeron Cyro | Xbox 360 |
-| 16D0:113C | Azeron Cyborg | Xbox 360 |
-| 16D0:1192 | Azeron Classic/Compact | Xbox 360 |
-| 16D0:1212 | Azeron Cyro Lefty | Xbox 360 |
-| 16D0:12F7 | Azeron Cyborg II | Xbox 360 |
-| 16D0:13EA | Azeron Keyzen | Xbox 360 |
 | 17EF:6182 | Lenovo Legion Controller for Windows | Xbox 360 |
 | 1949:041A | Amazon Game Controller | Xbox 360 |
 | 1A86:E310 | Legion Go S | Xbox 360 |
@@ -431,13 +425,6 @@ to the table.
 | 2E24:072E | Hyperkin Xenon Controller | Xbox One / Series |
 | 2E24:1688 | Hyperkin X91 X-Box One pad | Xbox One / Series |
 | 2E95:0504 | SCUF Gaming Controller | Xbox One / Series |
-| 31E3:1100 | Wooting One | Xbox 360 |
-| 31E3:1200 | Wooting Two | Xbox 360 |
-| 31E3:1210 | Wooting Lekker | Xbox 360 |
-| 31E3:1220 | Wooting Two HE | Xbox 360 |
-| 31E3:1230 | Wooting Two HE (ARM) | Xbox 360 |
-| 31E3:1300 | Wooting 60HE (AVR) | Xbox 360 |
-| 31E3:1310 | Wooting 60HE (ARM) | Xbox 360 |
 | 3285:0603 | Nacon Pro Compact controller for Xbox | Xbox One / Series |
 | 3285:0607 | Nacon GC-100 | Xbox 360 |
 | 3285:0614 | Nacon Pro Compact | Xbox One / Series |

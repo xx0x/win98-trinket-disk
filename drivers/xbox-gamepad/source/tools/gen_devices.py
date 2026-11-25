@@ -19,6 +19,9 @@ MAP = {'0': 0, 'MAP_DPAD_TO_BUTTONS': 1, 'MAP_TRIGGERS_TO_BUTTONS': 2, 'MAP_STIC
        'DANCEPAD_MAP_CONFIG': 1 | 2 | 4}
 TYPE = {'XTYPE_XBOX': 0, 'XTYPE_XBOX360': 1, 'XTYPE_XBOX360W': 2, 'XTYPE_XBOXONE': 3}
 FLAG = {'FLAG_DELAY_INIT': 1}
+# Keyboards and keypads with an Xbox 360 gamepad function: Windows 98 installs one driver for the whole
+# USB device, so listing them in the INF would take their keyboard away. Left out entirely.
+KEYBOARDS = re.compile(r'^(Wooting|Azeron)\b', re.I)
 
 def expr(s, names):
     v = 0
@@ -27,7 +30,7 @@ def expr(s, names):
         if part: v |= names[part]
     return v
 
-devs, seen = [], set()
+devs, seen, skipped = [], set(), []
 for m in re.finditer(r'\{\s*(0x[0-9a-fA-F]+),\s*(0x[0-9a-fA-F]+),\s*"((?:[^"\\]|\\.)*)",\s*([^,]+),\s*(XTYPE_\w+)\s*(?:,\s*([^}]*?))?\s*\}', table):
     vid, pid, name, mapping, xtype, flags = m.groups()
     if xtype not in TYPE: continue                  # XTYPE_UNKNOWN: the generic fallback entry
@@ -37,6 +40,8 @@ for m in re.finditer(r'\{\s*(0x[0-9a-fA-F]+),\s*(0x[0-9a-fA-F]+),\s*"((?:[^"\\]|
     name = name.replace('\\"', "'").strip()
     name = ''.join(c if 32 <= ord(c) < 127 and c not in '"%' else ' ' for c in name)
     name = re.sub(r'\s+', ' ', name).strip()
+    if KEYBOARDS.match(name):
+        skipped.append(name); continue
     devs.append((vid, pid, name, expr(mapping, MAP), TYPE[xtype], expr(flags or '', FLAG)))
 devs.sort()
 
@@ -122,4 +127,5 @@ if os.path.exists(readme):
     r = re.sub(r"All controllers of `xpad`'s device table \(\d+\)", "All controllers of `xpad`'s device table (%d)" % len(devs), r)
     r = re.sub(r'The full list of \d+ supported controllers', 'The full list of %d supported controllers' % len(devs), r)
     open(readme, 'w', encoding='utf-8').write(r)
+print('left out (keyboards/keypads): %d' % len(skipped))
 print('%d controllers: %s' % (len(devs), ', '.join('%s %d' % (TYPENAME[t], sum(1 for d in devs if d[4] == t)) for t in range(4))))
