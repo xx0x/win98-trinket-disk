@@ -16,13 +16,13 @@ clean-up, file checks, backup and full uninstall.
 * Download: [NUSB36UNIV.EXE](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/usb-mass-storage/NUSB36UNIV.EXE)
 * More info: [drivers/usb-mass-storage](drivers/usb-mass-storage/README.md)
 
-### XPAD98 – Xbox controllers
+### XGP98 – Xbox controllers
 
 A driver that lets Xbox 360, Xbox One and Xbox Series X|S controllers and
 compatible third-party controllers work on Windows 98 SE over a USB connection.
 An adaptation of the Linux `xpad` driver. Works with or without NUSB.
 
-* Download: [XPAD98.INF](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/xbox-gamepad/XPAD98.INF) and [XPAD98.SYS](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/xbox-gamepad/XPAD98.SYS) (keep both in one folder)
+* Download: [XGP98.INF](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/xbox-gamepad/XGP98.INF) and [XGP98.SYS](https://github.com/xx0x/win98-trinket-disk/raw/main/drivers/xbox-gamepad/XGP98.SYS) (keep both in one folder)
 * More info: [drivers/xbox-gamepad](drivers/xbox-gamepad/README.md)
 
 ## AI and Transparency

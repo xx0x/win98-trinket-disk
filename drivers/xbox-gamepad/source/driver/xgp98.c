@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * xpad98.c - XPAD98: Xbox, Xbox 360, Xbox One and Xbox Series compatible USB game controllers
+ * xgp98.c - XGP98: Xbox, Xbox 360, Xbox One and Xbox Series compatible USB game controllers
  *            for Windows 98 SE.
  *
  * An adaptation of the Linux Xbox gamepad driver (drivers/input/joystick/xpad.c) to Windows 98:
@@ -22,7 +22,7 @@
  *   information from ITO Takayuki (euc.jp/periphs/xbox-controller.ja.html), the Free60 project
  *   (Xbox 360) and Pekka Poyry (quantus, Xbox One protocol).
  *
- * Windows 98 adaptation (XPAD98): copyright (c) 2026 the win98-trinket-disk contributors.
+ * Windows 98 adaptation (XGP98): copyright (c) 2026 the win98-trinket-disk contributors.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -139,7 +139,7 @@ static const UCHAR g_report_desc[] = {
     0xC0                          /* End Collection */
 };
 #define REPORT_LEN 15
-#define XPAD_BUILD 11                       /* diagnostics: build number */
+#define XGP_BUILD 11                       /* diagnostics: build number */
 
 /* ------------------------------------------------------------------ device state */
 typedef struct {
@@ -165,12 +165,12 @@ typedef struct {
 
 #define HIDEXT(d) ((HID_DEVICE_EXTENSION *)(d)->DeviceExtension)
 #define EXT(d)    ((DEVEXT *)HIDEXT(d)->MiniDeviceExtension)
-#define TAG       'dapX'
+#define TAG       ' pgX'
 
-#ifdef XPAD_DIAG
-/* diagnostics (build with -DXPAD_DIAG): HKLM\Software\XPAD98\<name> = DWORD; the key must exist */
+#ifdef XGP_DIAG
+/* diagnostics (build with -DXGP_DIAG): HKLM\Software\XGP98\<name> = DWORD; the key must exist */
 static void dlog(PCWSTR name, ULONG v) {
-    RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE, L"\\Registry\\Machine\\Software\\XPAD98", name, REG_DWORD, &v, sizeof v);
+    RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE, L"\\Registry\\Machine\\Software\\XGP98", name, REG_DWORD, &v, sizeof v);
 }
 
 /* read-path counters, written to the registry by a work item (completion routines run at DISPATCH_LEVEL) */
@@ -186,7 +186,7 @@ static void NTAPI log_worker(PVOID ctx) {
     InterlockedExchange(&g_log_pending, 0);
     dlog(L"Reads", g_reads); dlog(L"Completions", g_done); dlog(L"Inputs", g_inputs);
     dlog(L"LastStatus", g_last_status); dlog(L"LastLen", g_last_len);
-    RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE, L"\\Registry\\Machine\\Software\\XPAD98", L"LastPacket",
+    RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE, L"\\Registry\\Machine\\Software\\XGP98", L"LastPacket",
                           REG_BINARY, g_last_pkt, sizeof g_last_pkt);
 }
 
@@ -615,7 +615,7 @@ static NTSTATUS NTAPI read_done(PDEVICE_OBJECT unused, PIRP irp, PVOID ctx) {
         ExFreePool(c);
         return STATUS_SUCCESS;
     }
-#ifdef XPAD_DIAG
+#ifdef XGP_DIAG
     InterlockedIncrement(&g_done);
     g_last_status = (ULONG)st; g_last_len = c->urb.TransferBufferLength;
     if (NT_SUCCESS(st)) memcpy(g_last_pkt, c->buf, sizeof g_last_pkt);
@@ -623,7 +623,7 @@ static NTSTATUS NTAPI read_done(PDEVICE_OBJECT unused, PIRP irp, PVOID ctx) {
 #endif
     if (NT_SUCCESS(st)) {
         if (parse_packet(e, c->buf, c->urb.TransferBufferLength)) {
-#ifdef XPAD_DIAG
+#ifdef XGP_DIAG
             InterlockedIncrement(&g_inputs);
 #endif
             make_report(e, (UCHAR *)irp->UserBuffer);
@@ -648,7 +648,7 @@ static NTSTATUS submit_read(PDEVICE_OBJECT d, PIRP irp) {
     RDCTX *c = ExAllocatePoolWithTag(NonPagedPool, sizeof *c, TAG);
     if (!c) return STATUS_INSUFFICIENT_RESOURCES;
     c->dev = d;
-#ifdef XPAD_DIAG
+#ifdef XGP_DIAG
     InterlockedIncrement(&g_reads);
 #endif
     IoMarkIrpPending(irp);
@@ -790,7 +790,7 @@ NTSTATUS NTAPI DriverEntry(PDRIVER_OBJECT drv, PUNICODE_STRING reg) {
     r.RegistryPath = reg;
     r.DeviceExtensionSize = sizeof(DEVEXT);
     r.DevicesArePolled = FALSE;
-    dlog(L"DriverEntry", XPAD_BUILD);
+    dlog(L"DriverEntry", XGP_BUILD);
     {
         NTSTATUS st = HidRegisterMinidriver(&r);
         dlog(L"HidRegister", st);

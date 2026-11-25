@@ -1,6 +1,6 @@
-# XPAD98 – Xbox controllers for Windows 98 SE
+# XGP98 – Xbox controllers for Windows 98 SE
 
-XPAD98 is an adaptation of the Linux Xbox gamepad driver
+XGP98 is an adaptation of the Linux Xbox gamepad driver
 ([`xpad`](https://github.com/torvalds/linux/blob/master/drivers/input/joystick/xpad.c))
 to Windows 98 SE. Like the Linux driver it is free software under the **GNU
 General Public License, version 2 or later**.
@@ -15,14 +15,14 @@ receiver work too. The full list of 322 supported controllers is
 
 | Files | Description |
 |---|---|
-| [`XPAD98.INF`](XPAD98.INF), [`XPAD98.SYS`](XPAD98.SYS) | the driver (copy both to a floppy, CD or folder) |
+| [`XGP98.INF`](XGP98.INF), [`XGP98.SYS`](XGP98.SYS) | the driver (copy both to a floppy, CD or folder) |
 | [`source/`](source/) | driver source, build tools, licence (`source/COPYING`) |
 
 ## Install
 
 1. Connect the controller. Windows finds a new USB device.
 2. In the *Add New Hardware Wizard* choose *Search for the best driver* and
-   point it at the folder / drive with `XPAD98.INF` (or Device Manager → the
+   point it at the folder / drive with `XGP98.INF` (or Device Manager → the
    device → *Update Driver* → *Have Disk*).
 3. Windows installs the controller and then its own *HID-compliant game
    controller* (it may ask for the Windows 98 CD). If it asks to restart, do so.
@@ -59,7 +59,7 @@ Bluetooth.
 
 ## How it works
 
-`XPAD98.SYS` is a WDM HID minidriver – the same kind of driver as Windows 98's
+`XGP98.SYS` is a WDM HID minidriver – the same kind of driver as Windows 98's
 own `HIDUSB.SYS` – so Windows' HID class driver and its standard joystick
 support (`JOYHID.VXD`, `VJOYD.VXD`) do the rest. Following `xpad`, the driver
 recognises the controller type (from `xpad`'s device table or the USB interface
@@ -95,22 +95,22 @@ sh source/tools/build.sh
 
 `gen_devices.py` regenerates the device table (`source/driver/devices.h`), the
 INF and the list below from `xpad.c`'s `xpad_device[]` table; `build.sh`
-writes `XPAD98.SYS`. `XPAD_CFLAGS=-DXPAD_DIAG` builds a diagnostic version that
-logs its start-up steps and packet counters to `HKLM\Software\XPAD98` (create
+writes `XGP98.SYS`. `XGP_CFLAGS=-DXGP_DIAG` builds a diagnostic version that
+logs its start-up steps and packet counters to `HKLM\Software\XGP98` (create
 the key first; export it with `regedit /e`).
 
 | File | Purpose |
 |---|---|
-| `source/driver/xpad98.c` | the driver |
+| `source/driver/xgp98.c` | the driver |
 | `source/driver/devices.h` | generated: VID/PID → controller type, `xpad` quirks |
-| `source/tools/gen_devices.py` | generates `devices.h`, `XPAD98.INF`, the controller list |
+| `source/tools/gen_devices.py` | generates `devices.h`, `XGP98.INF`, the controller list |
 | `source/tools/build.sh` | compiler / linker flags for a Windows 98 WDM driver |
 | `source/tools/fixpe.py` | import check, 1:1 section layout check, PE checksum |
 
 
 ## Licence and credits
 
-XPAD98 is free software; you can redistribute it and/or modify it under the
+XGP98 is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later
 version (`SPDX-License-Identifier: GPL-2.0-or-later`). It is distributed in the
